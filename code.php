@@ -1,34 +1,36 @@
-<?php 
-session_start();
-$con = mysqli_connect("localhost", "root","","lagunahillsdata");
+<?php
+$con = mysqli_connect("localhost","root","", "lagunahillsdata");
 
-if(isset($_POST['insert_data']))
+if(isset($_GET['search']))
 {
-    $firstname = $_POST['firstname'];
-    $lastname = $_POST['lastname'];
-    $age = $_POST['age'];
-    $gender = $_POST['gender'];
-    $address = $_POST['address'];
-
-    // INSERT INTO TABLENAME
-    // PATI KELANGAN SINGLE QUOTES LANG OR ELSE MAG ERROR SYA
-    $query = "INSERT INTO homeownerdb3 (firstname,lastname,age,gender,address) VALUES ('$firstname', '$lastname', '$age','$gender','$address') ";
-
-    //connect na sa database. first is connection then yung query statement mo
+    $filtervalues = $_GET['search'];
+    $query = "SELECT * FROM homeownerdb3 WHERE CONCAT(firstname,lastname,age,gender,address) LIKE '%$filtervalues%' ";
     $query_run = mysqli_query($con, $query);
 
-    if($query_run) // if connection is successfull. then do what is stated
+    if(mysqli_num_rows($query_run) > 0)
     {
-        $_SESSION['status'] = "You Inserted It Successfully";
-        header("location: index.php"); //  
+        foreach($query_run as $items)
+        {
+                ?>
+                <tr>
+                <td> <?=$items['id']  ?> </td>
+                <td> <?=$items['firstname']  ?> </td>
+                <td> <?=$items['lastname']  ?> </td>
+                <td> <?=$items['age']  ?> </td>
+                <td> <?=$items['gender']  ?> </td>
+                <td> <?=$items['address']  ?> </td>
+                </tr> 
+                <?php
+        }
     }
     else
     {
-        $_SESSION['status'] = "Data Not Inserted";
-        header("location: index.php");
+        ?>
+            <tr>
+                <td colspan="6">No Record Found</td>
+            </tr>   
+        <?php
     }
 }
-
-// ?>
-
-
+echo json_encode($query_run);
+?>

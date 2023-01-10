@@ -1,18 +1,18 @@
 var pagecounter = 1;
 var animalcontainer = document.getElementById("animal-info");
-var btn = document.getElementById("btn");
+var btn = document.getElementById("btnn");
 
 btn.addEventListener("click", function(){
-    var request = new XMLHttpRequest();
-request.open('GET', 'https://learnwebcode.github.io/json-example/animals-'+pagecounter+'.json');
+    var request1 = new XMLHttpRequest();
+request1.open('GET', 'https://learnwebcode.github.io/json-example/animals-'+pagecounter+'.json');
 // etong code sa taas means punta ka sa link and get the data. establish connection
 
-request.onload = function(){
-    var ourdata = JSON.parse(request.responseText); 
+request1.onload = function(){
+    var ourdata = JSON.parse(request1.responseText); 
     renderHTML(ourdata);
 };
 
-    request.send();
+    request1.send();
     pagecounter++;
     if (pagecounter == 4){
         btn.classList.add("hide-me");
